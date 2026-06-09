@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: image-task-studio
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: N1N_API_KEY
+        sync: false
+      - key: N1N_BASE_URL
+        value: https://llm-api.net
+      - key: IMAGE_MODEL
+        value: gpt-image-2
+      - key: APP_PASSWORD
+        sync: false
