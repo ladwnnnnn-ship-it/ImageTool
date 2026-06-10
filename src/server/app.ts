@@ -3,6 +3,7 @@ import Fastify from "fastify";
 import { z } from "zod";
 
 import { parseInstruction } from "../shared/instructions.ts";
+import type { TaskInterpreter } from "./interpreter.ts";
 
 const taskSchema = z.object({
   imageNumber: z.number().int().min(1).max(10),
@@ -22,6 +23,7 @@ type ProcessImage = (
 
 export function buildApp(dependencies: {
   processImage: ProcessImage;
+  interpretTasks?: TaskInterpreter;
   appPassword?: string;
 }) {
   const app = Fastify({ logger: false });
@@ -66,9 +68,11 @@ export function buildApp(dependencies: {
       })
       .parse(request.body);
 
-    return {
-      tasks: parseInstruction(input.instruction, input.imageCount),
-    };
+    const tasks = dependencies.interpretTasks
+      ? await dependencies.interpretTasks(input)
+      : parseInstruction(input.instruction, input.imageCount);
+
+    return { tasks };
   });
 
   app.post("/api/process", async (request, reply) => {

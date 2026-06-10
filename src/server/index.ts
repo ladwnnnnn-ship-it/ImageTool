@@ -6,6 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { buildApp } from "./app.ts";
+import { createTaskInterpreter } from "./interpreter.ts";
 import { createRelayProcessor } from "./relay.ts";
 
 const apiKey = process.env.N1N_API_KEY;
@@ -14,10 +15,15 @@ if (!apiKey) {
 }
 
 const app = buildApp({
+  interpretTasks: createTaskInterpreter({
+    apiKey,
+    baseUrl: process.env.N1N_BASE_URL ?? "https://llm-api.net",
+    model: process.env.TEXT_MODEL ?? "gpt-5.4-nano",
+  }),
   processImage: createRelayProcessor({
     apiKey,
     baseUrl: process.env.N1N_BASE_URL ?? "https://llm-api.net",
-    model: process.env.IMAGE_MODEL ?? "gpt-image-1",
+    model: process.env.IMAGE_MODEL ?? "gpt-image-2",
   }),
   appPassword: process.env.APP_PASSWORD,
 });

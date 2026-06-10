@@ -50,7 +50,7 @@ describe("App", () => {
         value: "第1张去掉右下角水印。第2张删除顶部文字。",
       },
     });
-    fireEvent.click(screen.getByRole("button", { name: "理解任务" }));
+    fireEvent.click(screen.getByRole("button", { name: "AI 理解任务" }));
 
     await waitFor(() => {
       expect(screen.getAllByText("去掉右下角水印")).toHaveLength(2);
@@ -59,5 +59,8 @@ describe("App", () => {
     expect(
       screen.getByRole("button", { name: "确认并开始处理" }),
     ).toBeEnabled();
+    expect(
+      screen.getByText(/由 gpt-5\.4-nano 理解/),
+    ).toBeInTheDocument();
   });
 });

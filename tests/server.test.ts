@@ -69,22 +69,27 @@ describe("server API", () => {
   });
 
   it("parses numbered instructions", async () => {
-    const app = buildApp({ processImage: vi.fn() });
+    const interpretTasks = vi.fn().mockResolvedValue([
+      { imageNumber: 1, instruction: "清除图片中的文字" },
+    ]);
+    const app = buildApp({ processImage: vi.fn(), interpretTasks });
     const response = await app.inject({
       method: "POST",
       url: "/api/parse",
       payload: {
-        instruction: "第1张去掉水印。第2到第3张删除顶部文字。",
+        instruction: "清除图1文字",
         imageCount: 3,
       },
     });
 
     expect(response.statusCode).toBe(200);
+    expect(interpretTasks).toHaveBeenCalledWith({
+      instruction: "清除图1文字",
+      imageCount: 3,
+    });
     expect(response.json()).toEqual({
       tasks: [
-        { imageNumber: 1, instruction: "去掉水印" },
-        { imageNumber: 2, instruction: "删除顶部文字" },
-        { imageNumber: 3, instruction: "删除顶部文字" },
+        { imageNumber: 1, instruction: "清除图片中的文字" },
       ],
     });
   });

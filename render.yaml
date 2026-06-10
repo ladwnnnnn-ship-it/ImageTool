@@ -11,5 +11,7 @@ services:
         value: https://llm-api.net
       - key: IMAGE_MODEL
         value: gpt-image-2
+      - key: TEXT_MODEL
+        value: gpt-5.4-nano
       - key: APP_PASSWORD
         sync: false

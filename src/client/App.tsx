@@ -277,7 +277,7 @@ export default function App() {
             onClick={understandTasks}
             disabled={busy}
           >
-            {busy && !tasks.length ? "正在理解…" : "理解任务"}
+            {busy && !tasks.length ? "AI 正在理解…" : "AI 理解任务"}
           </button>
         </div>
       </section>
@@ -289,7 +289,7 @@ export default function App() {
               <p className="section-number">03 / 核对</p>
               <h2>系统理解如下</h2>
             </div>
-            <span>{tasks.length} 个任务</span>
+            <span>由 gpt-5.4-nano 理解 · {tasks.length} 个任务</span>
           </div>
           <div className="task-list">
             {tasks.map((task) => (
