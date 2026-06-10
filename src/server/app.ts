@@ -28,6 +28,9 @@ export function buildApp(dependencies: {
 
   if (dependencies.appPassword) {
     app.addHook("onRequest", async (request, reply) => {
+      if (request.url === "/api/health") {
+        return;
+      }
       const expected = `Basic ${Buffer.from(
         `studio:${dependencies.appPassword}`,
       ).toString("base64")}`;

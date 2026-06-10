@@ -38,18 +38,31 @@ describe("server API", () => {
       appPassword: "private-pass",
     });
 
-    const unauthorized = await app.inject({
+    const health = await app.inject({
       method: "GET",
       url: "/api/health",
     });
+    const unauthorized = await app.inject({
+      method: "POST",
+      url: "/api/parse",
+      payload: {
+        instruction: "第1张去掉水印",
+        imageCount: 1,
+      },
+    });
     const authorized = await app.inject({
-      method: "GET",
-      url: "/api/health",
+      method: "POST",
+      url: "/api/parse",
       headers: {
         authorization: `Basic ${Buffer.from("studio:private-pass").toString("base64")}`,
       },
+      payload: {
+        instruction: "第1张去掉水印",
+        imageCount: 1,
+      },
     });
 
+    expect(health.statusCode).toBe(200);
     expect(unauthorized.statusCode).toBe(401);
     expect(unauthorized.headers["www-authenticate"]).toContain("Basic");
     expect(authorized.statusCode).toBe(200);
